@@ -4,7 +4,19 @@
 **** TOTALS
      Flip-Flops   : 0
      Logic Gates  : 0
+**** module/scope: AccumulatorTb
+     Flip-Flops   : 0
+     Logic Gates  : 0
+**** TOTALS
+     Flip-Flops   : 0
+     Logic Gates  : 0
 **** module/scope: Addend
+     Flip-Flops   : 0
+     Logic Gates  : 0
+**** TOTALS
+     Flip-Flops   : 0
+     Logic Gates  : 0
+**** module/scope: AddendTb
      Flip-Flops   : 0
      Logic Gates  : 0
 **** TOTALS
@@ -16,13 +28,19 @@
 **** TOTALS
      Flip-Flops   : 0
      Logic Gates  : 0
+**** module/scope: FullAdderTb
+     Flip-Flops   : 0
+     Logic Gates  : 0
+**** TOTALS
+     Flip-Flops   : 0
+     Logic Gates  : 0
 **** module/scope: Top
      Flip-Flops   : 0
      Logic Gates  : 0
 **** TOTALS
      Flip-Flops   : 0
      Logic Gates  : 0
-**** module/scope: testbench
+**** module/scope: TopTb
      Flip-Flops   : 0
      Logic Gates  : 0
 **** TOTALS

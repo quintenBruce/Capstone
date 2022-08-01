@@ -7,54 +7,60 @@
 :vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
 :vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
 :vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
-S_000002211373cee0 .scope module, "Accumulator" "Accumulator" 2 6;
+S_0000028e1bf42df0 .scope module, "Accumulator" "Accumulator" 2 6;
  .timescale 0 0;
     .port_info 0 /INPUT 1 "Si";
     .port_info 1 /INPUT 1 "Sh";
     .port_info 2 /OUTPUT 1 "Xi";
-o0000022113626fd8 .functor BUFZ 1, C4<z>; HiZ drive
-v00000221135f3540_0 .net "Sh", 0 0, o0000022113626fd8;  0 drivers
-o0000022113627008 .functor BUFZ 1, C4<z>; HiZ drive
-v0000022113626480_0 .net "Si", 0 0, o0000022113627008;  0 drivers
-o0000022113627038 .functor BUFZ 1, C4<z>; HiZ drive
-v0000022113626520_0 .net "Xi", 0 0, o0000022113627038;  0 drivers
-S_000002211373d070 .scope module, "Addend" "Addend" 2 10;
+o0000028e1bf76fb8 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bf43540_0 .net "Sh", 0 0, o0000028e1bf76fb8;  0 drivers
+o0000028e1bf76fe8 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bf43960_0 .net "Si", 0 0, o0000028e1bf76fe8;  0 drivers
+o0000028e1bf77018 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bf43a00_0 .net "Xi", 0 0, o0000028e1bf77018;  0 drivers
+S_0000028e1bf42f80 .scope module, "AccumulatorTb" "AccumulatorTb" 2 27;
+ .timescale 0 0;
+S_0000028e1bf75920 .scope module, "Addend" "Addend" 2 10;
  .timescale 0 0;
     .port_info 0 /INPUT 1 "Si";
     .port_info 1 /INPUT 1 "SH";
     .port_info 2 /OUTPUT 1 "Yi";
-o00000221136270f8 .functor BUFZ 1, C4<z>; HiZ drive
-v0000022113625ab0_0 .net "SH", 0 0, o00000221136270f8;  0 drivers
-o0000022113627128 .functor BUFZ 1, C4<z>; HiZ drive
-v0000022113625b50_0 .net "Si", 0 0, o0000022113627128;  0 drivers
-o0000022113627158 .functor BUFZ 1, C4<z>; HiZ drive
-v0000022113625bf0_0 .net "Yi", 0 0, o0000022113627158;  0 drivers
-S_0000022113626160 .scope module, "FullAdder" "FullAdder" 2 14;
+o0000028e1bf770d8 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bf75c40_0 .net "SH", 0 0, o0000028e1bf770d8;  0 drivers
+o0000028e1bf77108 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bf75ce0_0 .net "Si", 0 0, o0000028e1bf77108;  0 drivers
+o0000028e1bf77138 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebdd00_0 .net "Yi", 0 0, o0000028e1bf77138;  0 drivers
+S_0000028e1bf75ab0 .scope module, "AddendTb" "AddendTb" 2 31;
+ .timescale 0 0;
+S_0000028e1bf43640 .scope module, "FullAdder" "FullAdder" 2 14;
  .timescale 0 0;
     .port_info 0 /INPUT 1 "x";
     .port_info 1 /INPUT 1 "y";
     .port_info 2 /INPUT 1 "Ci";
     .port_info 3 /OUTPUT 1 "Si";
     .port_info 4 /OUTPUT 1 "Cout";
-o0000022113627218 .functor BUFZ 1, C4<z>; HiZ drive
-v0000022113625c90_0 .net "Ci", 0 0, o0000022113627218;  0 drivers
-o0000022113627248 .functor BUFZ 1, C4<z>; HiZ drive
-v000002211373b790_0 .net "Cout", 0 0, o0000022113627248;  0 drivers
-o0000022113627278 .functor BUFZ 1, C4<z>; HiZ drive
-v000002211373b830_0 .net "Si", 0 0, o0000022113627278;  0 drivers
-o00000221136272a8 .functor BUFZ 1, C4<z>; HiZ drive
-v000002211373b8d0_0 .net "x", 0 0, o00000221136272a8;  0 drivers
-o00000221136272d8 .functor BUFZ 1, C4<z>; HiZ drive
-v000002211373b970_0 .net "y", 0 0, o00000221136272d8;  0 drivers
-S_00000221136262f0 .scope module, "Top" "Top" 2 1;
+o0000028e1bf771f8 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebdda0_0 .net "Ci", 0 0, o0000028e1bf771f8;  0 drivers
+o0000028e1bf77228 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebde40_0 .net "Cout", 0 0, o0000028e1bf77228;  0 drivers
+o0000028e1bf77258 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebdee0_0 .net "Si", 0 0, o0000028e1bf77258;  0 drivers
+o0000028e1bf77288 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebb6b0_0 .net "x", 0 0, o0000028e1bf77288;  0 drivers
+o0000028e1bf772b8 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebb750_0 .net "y", 0 0, o0000028e1bf772b8;  0 drivers
+S_0000028e1bf437d0 .scope module, "FullAdderTb" "FullAdderTb" 2 35;
+ .timescale 0 0;
+S_0000028e1bebcdd0 .scope module, "Top" "Top" 2 1;
  .timescale 0 0;
     .port_info 0 /INPUT 1 "St";
     .port_info 1 /INPUT 1 "CLK";
-o00000221136273f8 .functor BUFZ 1, C4<z>; HiZ drive
-v000002211373ba10_0 .net "CLK", 0 0, o00000221136273f8;  0 drivers
-o0000022113627428 .functor BUFZ 1, C4<z>; HiZ drive
-v000002211373bab0_0 .net "St", 0 0, o0000022113627428;  0 drivers
-S_0000022113625920 .scope module, "testbench" "testbench" 2 23;
+o0000028e1bf773d8 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebb7f0_0 .net "CLK", 0 0, o0000028e1bf773d8;  0 drivers
+o0000028e1bf77408 .functor BUFZ 1, C4<z>; HiZ drive
+v0000028e1bebb890_0 .net "St", 0 0, o0000028e1bf77408;  0 drivers
+S_0000028e1bebcf60 .scope module, "TopTb" "TopTb" 2 23;
  .timescale 0 0;
 # The file index is used to find the file name in the following table.
 :file_names 3;
