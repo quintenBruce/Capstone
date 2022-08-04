@@ -1,5 +1,5 @@
 $date
-	Thu Aug 04 14:29:12 2022
+	Thu Aug 04 17:58:24 2022
 $end
 $version
 	Icarus Verilog
@@ -15,43 +15,54 @@ $var wire 8 # eightBitSubtrahend [7:0] $end
 $var wire 1 $ subtrahend $end
 $var wire 1 % minuend $end
 $var wire 8 & eightBitDifference [7:0] $end
-$var wire 1 ' Si $end
-$var wire 1 ( Bout $end
-$var wire 1 ) Bin $end
-$var reg 1 * CLK $end
-$var reg 1 + LAccumulator $end
-$var reg 1 , LSubtrahend $end
-$var reg 1 - PoutE $end
-$var reg 1 . R $end
+$var wire 1 ' StatusRegZ $end
+$var wire 1 ( StatusRegV $end
+$var wire 1 ) StatusRegN $end
+$var wire 1 * Si $end
+$var wire 1 + Bout $end
+$var wire 1 , Bin $end
+$var reg 1 - CLK $end
+$var reg 1 . LAccumulator $end
+$var reg 1 / LSubtrahend $end
+$var reg 1 0 PoutE $end
+$var reg 1 1 R $end
 $scope module accumulatorReg $end
-$var wire 1 * CLK $end
-$var wire 1 + L $end
-$var wire 8 / Load [7:0] $end
-$var wire 1 - PoutE $end
-$var wire 1 ' Si $end
-$var reg 8 0 Pout [7:0] $end
+$var wire 1 - CLK $end
+$var wire 1 . L $end
+$var wire 8 2 Load [7:0] $end
+$var wire 1 0 PoutE $end
+$var wire 1 * Si $end
+$var reg 8 3 Pout [7:0] $end
 $var reg 1 % Sout $end
-$var reg 8 1 accumulator [7:0] $end
+$var reg 8 4 accumulator [7:0] $end
 $upscope $end
 $scope module flipflop $end
-$var wire 1 * CLK $end
-$var wire 1 . R $end
-$var wire 1 ( D $end
-$var reg 1 ) Q $end
+$var wire 1 - CLK $end
+$var wire 1 1 R $end
+$var wire 1 + D $end
+$var reg 1 , Q $end
+$upscope $end
+$scope module register $end
+$var wire 8 5 X [7:0] $end
+$var wire 8 6 Y [7:0] $end
+$var wire 1 - clk $end
+$var reg 1 ' SReg1 $end
+$var reg 1 ) SReg2 $end
+$var reg 1 ( SReg3 $end
 $upscope $end
 $scope module subtractor $end
-$var wire 1 ) Bin $end
-$var wire 1 ( Bout $end
-$var wire 1 ' D $end
+$var wire 1 , Bin $end
+$var wire 1 + Bout $end
+$var wire 1 * D $end
 $var wire 1 % X $end
 $var wire 1 $ Y $end
 $upscope $end
 $scope module subtrahendReg $end
-$var wire 1 * CLK $end
-$var wire 1 , L $end
-$var wire 8 2 Load [7:0] $end
+$var wire 1 - CLK $end
+$var wire 1 / L $end
+$var wire 8 7 Load [7:0] $end
 $var reg 1 $ Sout $end
-$var reg 8 3 subtrahend [7:0] $end
+$var reg 8 8 subtrahend [7:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -61,113 +72,107 @@ $dumpall
 $end
 #0
 $dumpvars
-b10000011 3
-b10000011 2
-b10100101 1
-bx 0
-b10100101 /
+b11110111 8
+b11110111 7
+b11110111 6
+b110100 5
+b110100 4
+bx 3
+b110100 2
+11
+00
+1/
 1.
 0-
-1,
-1+
-0*
-0)
-x(
-x'
+0,
+x+
+x*
+1)
+1(
+0'
 bx &
 x%
 x$
-b10000011 #
-b10100101 "
+b11110111 #
+b110100 "
 x!
 $end
 #10
-0,
-0+
+0/
 0.
+01
 #20
-0(
-0'
-1%
+1+
+1*
+0%
 1$
-1*
-#30
-b11000001 3
-b1010010 1
-0*
-#40
-1(
-1'
-0%
-1*
-#50
-0'
-b10101001 1
-b11100000 3
-1)
-0*
-#60
-0(
-1%
-0$
-1*
-#70
-1'
-0)
-b1110000 3
-b1010100 1
-0*
-#80
-0'
-0%
-1*
-#90
-b101010 1
-b111000 3
-0*
-#100
-1*
-#110
-b11100 3
-b10101 1
-0*
-#120
-1'
-1%
-1*
-#130
-b10001010 1
-b1110 3
-0*
-#140
-0'
-0%
-1*
-#150
-b111 3
-b1000101 1
-0*
-#160
-1$
-1%
-1*
-#170
-b100010 1
-b10000011 3
-0*
-#180
-1(
-1'
-b100010 &
-b100010 0
-0%
-1*
 1-
-#190
-0'
-1)
-b11000001 3
-b10010001 &
-b10010001 0
-b10010001 1
+#30
 0*
+1,
+b11111011 8
+b10011010 4
+0-
+#40
+1-
+#50
+b1001101 4
+b11111101 8
+0-
+#60
+1*
+1%
+1-
+#70
+b11111110 8
+b10100110 4
+0-
+#80
+0$
+0%
+1-
+#90
+b11010011 4
+b1111111 8
+0-
+#100
+1%
+1$
+1-
+#110
+b10111111 8
+b11101001 4
+0-
+#120
+1-
+#130
+b11110100 4
+b11011111 8
+0-
+#140
+0*
+0%
+1-
+#150
+b11101111 8
+b1111010 4
+0-
+#160
+1-
+#170
+b111101 4
+b11110111 8
+0-
+#180
+1*
+b111101 &
+b111101 3
+1%
+1-
+10
+#190
+b11111011 8
+b10011110 &
+b10011110 3
+b10011110 4
+0-

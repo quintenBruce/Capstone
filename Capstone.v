@@ -34,7 +34,7 @@ module accumulator_shift_reg (input CLK, //Clock
 endmodule
 
 // cyclical shift register
-module addend_shift_reg (input CLK, //Clock
+module subtrahend_shift_reg (input CLK, //Clock
 						 input L, //Load enable
 						 input [7:0] Load, //Load 
 						 output Sout //Serial out
@@ -44,11 +44,10 @@ module addend_shift_reg (input CLK, //Clock
 	reg [7:0] subtrahend;
 
 	always @ (CLK) begin
-		if (L) begin
+		if (L) 
 			subtrahend = Load;
-		end
 	end	
-	
+
 	always @ (posedge CLK) begin
 		if (!L)
 			Sout = subtrahend[0];
@@ -86,10 +85,40 @@ module full_subtractor (input X, //Minuend
     assign Bout = (~X & Bin) | (Y & Bin) | (~X & Y); //Bout(x, y, Bin) = x'*Bin + Y*Bin + x'y
 endmodule
 
+// Status Register module
+module status_register(input [7:0] X,   // Minuend
+					   input [7:0] Y,   // Subtrahend
+					   input clk, // Clock
+					   output reg SReg1, // Status Register Z, 0x00
+					   output reg SReg2, // Status Register N, negative
+					   output reg SReg3  // Status Register V, overflow
+					   );
+	always @ (negedge clk) begin
+		if (X == Y)
+			SReg1 = 1;
+			else
+			SReg1 = 0;
+		if (X < Y)
+			SReg2 = 1;
+		else
+			SReg2 = 0;
+		if ((Y - X) >= 128)
+			SReg3 = 1;
+		else
+			SReg3 = 0;
+	end
+endmodule	
+
+
+	
+
 module top (input St, //start signal
 			input [7:0] eightBitMinuend,
 			input [7:0] eightBitSubtrahend,
-			output [7:0] eightBitDifference
+			output [7:0] eightBitDifference,
+			output StatusRegZ,
+			output StatusRegN,
+			output StatusRegV
 			);
 	reg [7:0] acc;
 	reg CLK = 0;
@@ -97,6 +126,7 @@ module top (input St, //start signal
 	wire minuend;
 	reg PoutE = 0;
 	wire [7:0] Difference;
+	wire Z, N, V; 
 
 	accumulator_shift_reg accumulatorReg(
 		.CLK(CLK), .Si(Si), .L(LAccumulator), .Load(eightBitMinuend), .Sout(minuend), .PoutE(PoutE), .Pout(eightBitDifference)
@@ -105,7 +135,7 @@ module top (input St, //start signal
 	reg LSubtrahend = 1;
 	wire subtrahend;
 
-	addend_shift_reg subtrahendReg(
+	subtrahend_shift_reg subtrahendReg(
 		.CLK(CLK), .L(LSubtrahend), .Load(eightBitSubtrahend), .Sout(subtrahend)
 	);
 
@@ -121,6 +151,10 @@ module top (input St, //start signal
 		.X(minuend), .Y(subtrahend), .Bin(Bin), .D(Si), .Bout(Bout)
 	);
 
+	status_register register(
+		.X(eightBitMinuend), .Y(eightBitSubtrahend), .clk(CLK), .SReg1(StatusRegZ), .SReg2(StatusRegN), .SReg3(StatusRegV)
+	);
+
 	initial begin
 		$dumpfile("sss.vcd");
 		$dumpvars(0, top);
@@ -132,7 +166,6 @@ module top (input St, //start signal
 		CLK = 0;
 		LAccumulator = 0;
 		LSubtrahend = 0;
-		//$display("\nCLK: %b Min: %b, Sub: %b, D: %b Bout: %b",CLK,  minuend, subtrahend, Si, Bout);
 		#10
 		CLK = ~CLK;
 	end
@@ -141,9 +174,7 @@ module top (input St, //start signal
 	always #180 begin
 		PoutE = 1;
 		#10
-		//$display("Accu: ", Difference);
 		$finish;
-
 	end
 endmodule
 
@@ -155,23 +186,20 @@ endmodule
 module topTB; //Testbench for control circuit
     reg St; //Input registers
 
-	reg [7:0] eightBitMinuend = 8'b10100101 ;
-	reg [7:0] eightBitSubtrahend = 8'b10000011;
+	reg [7:0] eightBitMinuend = 8'b00110100;
+	reg [7:0] eightBitSubtrahend = 8'b11110111;
 	wire [7:0] eightBitDifference;
+	wire Z, N, V;
 
-	top UUT(.St(St), .eightBitMinuend(eightBitMinuend), .eightBitSubtrahend(eightBitSubtrahend), .eightBitDifference(eightBitDifference)); // Unit Under Test
+	top UUT(.St(St), .eightBitMinuend(eightBitMinuend), .eightBitSubtrahend(eightBitSubtrahend), .eightBitDifference(eightBitDifference), .StatusRegZ(Z), .StatusRegN(N), .StatusRegV(V)); // Unit Under Test
 	// Test Execution
 	initial begin
 		#190
 		$display(" %b {%d}", eightBitMinuend, eightBitMinuend);
 		$display("-%b {%d}", eightBitSubtrahend, eightBitSubtrahend);
 		$display("------------");
-		$display(" %b {%d}\n\n", eightBitDifference, eightBitDifference);
-		// #190
-		// 
-		// $display(" %b {%d}", eightBitMinuend, eightBitMinuend);
-		// $display("-%b {%d}", eightBitSubtrahend, eightBitSubtrahend);
-		// $display("------------");
-		// $display(" %b {%d}\n\n", eightBitDifference, );
+		$display(" %b {%d}\n", eightBitDifference, eightBitDifference);
+		$display("Status Registers:");
+		$display("Z= %b  N= %b  V= %b", Z, N, V);
 	end
 endmodule
