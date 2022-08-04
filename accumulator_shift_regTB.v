@@ -2,5 +2,53 @@
 `include "Capstone.v"
 
 module accumulator_shift_regTB; //Testbench for accumulator
-	
+    reg CLK, C, L, Si; 
+    reg [7:0] Load;
+    
+	wire Sout;
+	accumulator_shift_reg UUT(CLK, Si, L, Load, Sout);
+
+    initial begin
+        CLK = 0; 
+        Load = 8'b10100100;
+        L = 1;
+        Si = 1;
+ 
+
+        $display("CLK L Load      Sout");
+        
+
+
+        $monitor("Sout: %b", Sout);
+
+        #10 
+        CLK = 1;
+        L = 0;
+        Si = 1;
+        #10 
+        CLK = 0;
+        L = 0;
+        Si = 1;
+        #10 
+        CLK = 1;
+        L = 0;
+        #10 
+        CLK = 0;
+        L = 1;
+        Load = 8'b00000000;
+        #10
+        CLK = 1;
+        L = 0;
+        #10
+        CLK = 0;
+        L = 0;
+    end 
+
+    
+        
+	initial begin
+		 	
+	end
+    initial
+		#90 $finish; 
 endmodule

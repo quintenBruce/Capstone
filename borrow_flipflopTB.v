@@ -9,14 +9,14 @@ module borrow_flipflopTB; //Testbench for borrow flip flop module
         #10;
         
         
-        $display("%b  %b  | %b", D, CLK, Q); 
+        $monitor("%b  %b  %b| %b", D, CLK, Q); 
 		{D, CLK} = {D, CLK} + 1;
 		
     end
         
 	initial begin
-	    {D, CLK} = 3'b0; 
-		$display("D CLK | Q"); 	
+	    {D, CLK} = 2'b00; 
+		$display("D CLK  R| Q"); 	
 	end
     initial
 		#90 $finish; 
