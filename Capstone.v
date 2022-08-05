@@ -25,7 +25,6 @@ module accumulator_shift_reg (input CLK, //Clock
 	always @ (negedge CLK) begin
 		if (!LE)
 			accumulator = {Si, accumulator[7:1]};
-
 		if (PoutE)
 			Pout = accumulator;
 	end
