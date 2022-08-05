@@ -1,7 +1,7 @@
 //accumulator right shift register
 module accumulator_shift_reg (input CLK, //Clock
 							  input Si, //Serial in
-							  input L, //Load enable
+							  input LE, //Load enable
 							  input [7:0] Load, //Load value
 							  input PoutE, //Parralell out enable
 							  output Sout, //Shift out
@@ -11,21 +11,19 @@ module accumulator_shift_reg (input CLK, //Clock
 	reg [7:0] accumulator;
 
 	always @ (CLK) begin
-		if (L) begin 
+		if (LE)
 			accumulator = Load;
-		end
-		
 	end
 
 	always @ (posedge CLK) begin
-		if (!L)
+		if (!LE)
 			Sout = accumulator[0];
 		if (PoutE)
 			Pout = accumulator;
 	end
 
 	always @ (negedge CLK) begin
-		if (!L)
+		if (!LE)
 			accumulator = {Si, accumulator[7:1]};
 
 		if (PoutE)
@@ -35,25 +33,25 @@ endmodule
 
 // cyclical shift register
 module subtrahend_shift_reg (input CLK, //Clock
-						 input L, //Load enable
+						 input LE, //Load enable
 						 input [7:0] Load, //Load 
 						 output Sout //Serial out
 						 );
-
 	reg Sout;
 	reg [7:0] subtrahend;
 
 	always @ (CLK) begin
-		if (L) 
+		if (LE) 
 			subtrahend = Load;
 	end	
 
 	always @ (posedge CLK) begin
-		if (!L)
+		if (!LE)
 			Sout = subtrahend[0];
-	end	
+	end
+
 	always @ (negedge CLK) begin
-		if (!L) 
+		if (!LE) 
 			subtrahend = {subtrahend[0], subtrahend[7:1]};
 	end
 endmodule
@@ -65,11 +63,8 @@ module borrow_flipflop (input D, //Input
 					   input R, //Reset
                        output reg Q //Output
 					   ); 
-    always @(negedge CLK) begin //executes block at every neg edge of clock // print current values to output console
-        if (!R)
-			Q = D;
-		else
-			Q = 0;
+    always @(negedge CLK) begin
+		Q = R ? 0 : D;
     end
 endmodule
 
@@ -80,7 +75,6 @@ module full_subtractor (input X, //Minuend
                        output D, //Difference
                        output Bout //Borrow out
 					   ); 
-    
     assign D = X ^ Y ^ Bin; // D(x, y, Bin) = x ⊕ y ⊕ Bin
     assign Bout = (~X & Bin) | (Y & Bin) | (~X & Y); //Bout(x, y, Bin) = x'*Bin + Y*Bin + x'y
 endmodule
@@ -94,31 +88,19 @@ module status_register(input [7:0] X,   // Minuend
 					   output reg SReg3  // Status Register V, overflow
 					   );
 	always @ (negedge clk) begin
-		if (X == Y)
-			SReg1 = 1;
-			else
-			SReg1 = 0;
-		if (X < Y)
-			SReg2 = 1;
-		else
-			SReg2 = 0;
-		if ((Y - X) >= 128)
-			SReg3 = 1;
-		else
-			SReg3 = 0;
+		SReg1 = X == Y ? 1 : 0;
+		SReg2 = X < Y ? 1 : 0;
+		SReg3 = ((Y - X) >= 128) ? 1 : 0;
 	end
 endmodule	
 
-
-	
-
 module top (input St, //start signal
-			input [7:0] eightBitMinuend,
-			input [7:0] eightBitSubtrahend,
-			output [7:0] eightBitDifference,
-			output StatusRegZ,
-			output StatusRegN,
-			output StatusRegV
+			input [7:0] eightBitMinuend, //One byte minuend
+			input [7:0] eightBitSubtrahend, //One byte Subtrahend
+			output [7:0] eightBitDifference, //One byte difference
+			output StatusRegZ, //Flag (subtraction operation is 0x00)
+			output StatusRegN, //Flag (subtraction is negative)
+			output StatusRegV // Flag (subtraction operation results in an overflow)
 			);
 	reg [7:0] acc;
 	reg CLK = 0;
@@ -128,37 +110,32 @@ module top (input St, //start signal
 	wire [7:0] Difference;
 	wire Z, N, V; 
 
-	accumulator_shift_reg accumulatorReg(
-		.CLK(CLK), .Si(Si), .L(LAccumulator), .Load(eightBitMinuend), .Sout(minuend), .PoutE(PoutE), .Pout(eightBitDifference)
+	accumulator_shift_reg accumulatorReg( //Instantiate accumulater shift register
+		.CLK(CLK), .Si(Si), .LE(LAccumulator), .Load(eightBitMinuend), .Sout(minuend), .PoutE(PoutE), .Pout(eightBitDifference)
 	);
 
 	reg LSubtrahend = 1;
 	wire subtrahend;
 
-	subtrahend_shift_reg subtrahendReg(
-		.CLK(CLK), .L(LSubtrahend), .Load(eightBitSubtrahend), .Sout(subtrahend)
+	subtrahend_shift_reg subtrahendReg( //Instantiate subtrahend shift register
+		.CLK(CLK), .LE(LSubtrahend), .Load(eightBitSubtrahend), .Sout(subtrahend)
 	);
 
 	wire Bout;
 	wire Bin;
 	reg R = 1;
 
-	borrow_flipflop flipflop(
+	borrow_flipflop flipflop( //Instantiate borrow flipflop
 		.D(Bout), .CLK(CLK), .R(R), .Q(Bin)
 	);
 
-	full_subtractor subtractor(
+	full_subtractor subtractor(//Instantiate full subtractor combinational circuit
 		.X(minuend), .Y(subtrahend), .Bin(Bin), .D(Si), .Bout(Bout)
 	);
 
-	status_register register(
+	status_register register( //Instantiate status register
 		.X(eightBitMinuend), .Y(eightBitSubtrahend), .clk(CLK), .SReg1(StatusRegZ), .SReg2(StatusRegN), .SReg3(StatusRegV)
 	);
-
-	initial begin
-		$dumpfile("sss.vcd");
-		$dumpvars(0, top);
-	end
 	
 	always begin
 		#10 
@@ -166,15 +143,12 @@ module top (input St, //start signal
 		CLK = 0;
 		LAccumulator = 0;
 		LSubtrahend = 0;
-		#10
-		CLK = ~CLK;
+		#10 CLK = ~CLK;
 	end
-
 
 	always #180 begin
 		PoutE = 1;
-		#10
-		$finish;
+		#10 $finish;
 	end
 endmodule
 
@@ -185,8 +159,7 @@ endmodule
 
 module topTB; //Testbench for control circuit
     reg St; //Input registers
-
-	reg [7:0] eightBitMinuend = 8'b00110100;
+	reg [7:0] eightBitMinuend = 8'b00110100; //assi
 	reg [7:0] eightBitSubtrahend = 8'b11110111;
 	wire [7:0] eightBitDifference;
 	wire Z, N, V;
@@ -198,7 +171,7 @@ module topTB; //Testbench for control circuit
 		$display(" %b {%d}", eightBitMinuend, eightBitMinuend);
 		$display("-%b {%d}", eightBitSubtrahend, eightBitSubtrahend);
 		$display("------------");
-		$display(" %b {%d}\n", eightBitDifference, eightBitDifference);
+		$display(" %b\n", eightBitDifference);
 		$display("Status Registers:");
 		$display("Z= %b  N= %b  V= %b", Z, N, V);
 	end

@@ -6,7 +6,8 @@ module full_subtractorTB; //Testbench for full subtractor
 	
 	wire D, Bout; // Output wires
 	
-	full_subtractor UUT(X, Y, Bin, D, Bout); // Unit Under Test
+	full_subtractor UUT(X, Y, Bin, D, Bout); 
+	// Unit Under Test
 	// Test Execution
 	initial 
 	begin
